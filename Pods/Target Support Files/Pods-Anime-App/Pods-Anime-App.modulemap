@@ -1,0 +1,6 @@
+framework module Pods_Anime_App {
+  umbrella header "Pods-Anime-App-umbrella.h"
+
+  export *
+  module * { export * }
+}
