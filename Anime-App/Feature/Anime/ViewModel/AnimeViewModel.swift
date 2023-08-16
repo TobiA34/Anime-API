@@ -8,48 +8,44 @@
 import Foundation
 
 class AnimeViewModel {
-    func getAnime(completion: @escaping (Result<[Anime], Error>) -> Void) {
+    
+    var showSpinner = false
+    
+    private(set) var animes: [Anime] = []
+    
+    func getAnime(completion: @escaping (Result<Void,NetworkingError>) -> Void) {
         // get request
-        guard let url = URL(string: "https://kitsu.io/api/edge/anime") else { return }
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard error == nil else {
-                completion(.failure(error!))
-                return
+        let url = UrlEndpoint.baseUrl.endpoint + UrlEndpoint.getAnime.endpoint
+        
+        NetworkingManager.shared.request(url, type: AnimeResult.self) { res in
+            self.showSpinner = true
+            switch res {
+            case .success(let response):
+               self.animes = response.data
+                completion(.success(()))
+            self.showSpinner = false
+              case .failure:
+                completion(.failure(NetworkingError.failedToReloadData))
             }
-            do {
-                guard let data = data else {return}
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let anime = try decoder.decode(AnimeResult.self, from: data)
-                completion(.success(anime.data))
-                print(anime)
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
+        }
+        
     }
     
-    func searchAnime(query: String, completion: @escaping (Result<[Anime], Error>) -> Void) {
+    func searchAnime(query: String, completion: @escaping (Result<Void,NetworkingError>) -> Void) {
         // search request
-        let url = "https://kitsu.io/api/edge/anime?filter[text]=\(query)"
-
-        guard let url = URL(string: url) else { return }
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard error == nil else {
-                completion(.failure(error!))
-                return
+        let url = UrlEndpoint.baseUrl.endpoint + UrlEndpoint.searchAnime.endpoint + query
+        
+        NetworkingManager.shared.request(url, type: AnimeResult.self) { res in
+            self.showSpinner = true
+            switch res {
+            case .success(let response):
+                self.animes = response.data
+                completion(.success(()))
+             case .failure:
+                completion(.failure(NetworkingError.failedToReloadData))
             }
-            do {
-                guard let data = data else {return}
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let anime = try decoder.decode(AnimeResult.self, from: data)
-                completion(.success(anime.data))
-                print(anime)
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
+            self.showSpinner = false
+        }
+        
     }
-    
 }

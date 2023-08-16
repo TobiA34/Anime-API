@@ -20,14 +20,14 @@ class AnimeDetailViewController: UIViewController {
         return stackview
     }()
     
-    private lazy var image: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
  
-    private lazy var synopsis: UITextView = {
+    private lazy var synopsisTextView: UITextView = {
         let synopsis = UITextView()
         synopsis.translatesAutoresizingMaskIntoConstraints = false
         synopsis.isEditable = false
@@ -50,22 +50,22 @@ class AnimeDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        title = anime.attributes?.slug
     }
 }
 
 extension AnimeDetailViewController {
     func setup() {
         view.backgroundColor = .white
+        title = anime.attributes?.slug
         view.addSubview(mainStackview)
-        mainStackview.addArrangedSubview(image)
-         mainStackview.addArrangedSubview(synopsis)
+        mainStackview.addArrangedSubview(imageView)
+         mainStackview.addArrangedSubview(synopsisTextView)
 
 
         let url = URL(string: anime.attributes?.posterImage.medium ?? "")
-        image.kf.setImage(with: url)
+        imageView.kf.setImage(with: url)
         
-        synopsis.text = anime.attributes?.synopsis
+        synopsisTextView.text = anime.attributes?.synopsis
  
 
         NSLayoutConstraint.activate([
@@ -74,8 +74,8 @@ extension AnimeDetailViewController {
             mainStackview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -16),
             mainStackview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            image.heightAnchor.constraint(equalToConstant: 300),
-            image.widthAnchor.constraint(equalToConstant: 500)
+            imageView.heightAnchor.constraint(equalToConstant: 300),
+            imageView.widthAnchor.constraint(equalToConstant: 500)
 
         ])
     }

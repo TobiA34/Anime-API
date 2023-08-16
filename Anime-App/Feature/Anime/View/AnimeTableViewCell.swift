@@ -9,6 +9,7 @@ import UIKit
 
 class AnimeTableViewCell: UITableViewCell {
     static let cellID = "AnimeTableViewCell"
+        
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -18,7 +19,7 @@ class AnimeTableViewCell: UITableViewCell {
         stackView.alignment = .fill
         return stackView
     }()
-    private lazy var title: UILabel = {
+    private lazy var titleLbl: UILabel = {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
@@ -30,17 +31,19 @@ class AnimeTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    
     func configure(anime: Anime) {
         let editedSlugText = anime.attributes?.slug?.replacingOccurrences(of: "-", with: " ")
-
-        title.text = editedSlugText?.capitalizingFirstLetter()
+        titleLbl.text = editedSlugText?.capitalizingFirstLetter()
     }
 }
 
 extension AnimeTableViewCell {
     func setup() {
         contentView.addSubview(stackView)
-        stackView.addArrangedSubview(title)
+        stackView.addArrangedSubview(titleLbl)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -48,15 +51,11 @@ extension AnimeTableViewCell {
             stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
-}
-
-
-extension String {
-    func capitalizingFirstLetter() -> String {
-      return prefix(1).uppercased() + self.lowercased().dropFirst()
-    }
-
-    mutating func capitalizeFirstLetter() {
-      self = self.capitalizingFirstLetter()
+    
+    override func prepareForReuse() {
+        titleLbl.text = nil
     }
 }
+
+
+
