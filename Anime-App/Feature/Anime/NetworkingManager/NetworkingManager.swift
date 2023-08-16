@@ -21,14 +21,12 @@ import Foundation
 class NetworkingManager {
     static let shared = NetworkingManager()
     var hasError = false
-    private(set) var isRefreshing =  false
+    
     private init() {}
     
     func request<T: Codable>(_ absoluteUrl: String,
                              type: T.Type,
                              completion: @escaping (Result<T,Error>) -> Void) {
-        isRefreshing = true
-
         guard let url = URL(string: absoluteUrl) else {
             completion(.failure(NetworkingError.invalidUrl))
             return
@@ -38,7 +36,7 @@ class NetworkingManager {
         
         let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
-                
+                            
                 if error != nil {
                     completion(.failure(NetworkingError.custom(error: error!)))
                     return
@@ -67,8 +65,7 @@ class NetworkingManager {
                     self.hasError = true
                     completion(.failure(NetworkingError.failedToDecode(error: error)))
                 }
-                self.isRefreshing = false
-            }
+             }
         }
         dataTask.resume()
     }

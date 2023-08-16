@@ -11,11 +11,9 @@ class AnimeViewController: UIViewController {
     
     var searchTask: DispatchWorkItem?
     private var animeViewModel = AnimeViewModel()
-
+    
     private lazy var spinner : UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
-        spinner.backgroundColor = .black
-        spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()
     
@@ -58,18 +56,17 @@ extension AnimeViewController: UISearchBarDelegate {
         
         let task = DispatchWorkItem { [weak self] in
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                //Use search text and perform the query
-                
+                self?.spinner.startAnimating()
                 self?.animeViewModel.searchAnime(query: searchText) { res in
                     
                     switch res {
                     case .success:
                         self?.tableView.reloadData()
                     case .failure(let error):
-                        //show alert
-                        self?.showAlert(title: "Error", message: "Failed to reload TableView")
-                        print(error)
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
                     }
+                    self?.spinner.stopAnimating()
+                    
                 }
             }
         }
@@ -102,8 +99,10 @@ extension AnimeViewController {
         tableView.delegate = self
         getAnime()
         createSearchBar()
-        view.addSubview(spinner)
         view.addSubview(tableView)
+        spinner.center = self.view.center
+        self.view.addSubview(spinner)
+        spinner.bringSubviewToFront(self.view)
         
         NSLayoutConstraint.activate([
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -116,17 +115,24 @@ extension AnimeViewController {
     }
     
     func getAnime() {
+        
+        self.spinner.startAnimating()
         animeViewModel.getAnime { res in
             switch res {
             case .success:
                 self.tableView.reloadData()
-            case .failure:
-                self.showAlert(title: "Error", message: "Failed to reload TableView")
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
             }
+            self.spinner.stopAnimating()
         }
+        
     }
     
 }
+
+
+
 
 
 extension AnimeViewController: UITableViewDataSource, UITableViewDelegate {
@@ -152,4 +158,4 @@ extension AnimeViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
- 
+

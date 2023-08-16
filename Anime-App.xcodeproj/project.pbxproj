@@ -19,7 +19,7 @@
 		BD7676232A839B90004771EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD7676212A839B90004771EB /* LaunchScreen.storyboard */; };
 		BD9240332A87E1EA00DCA200 /* UIViewController+alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9240322A87E1EA00DCA200 /* UIViewController+alert.swift */; };
 		BD9240352A87E31D00DCA200 /* NetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9240342A87E31D00DCA200 /* NetworkingManager.swift */; };
-		BD9240392A87E44D00DCA200 /* String+capitalizingFirstLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9240382A87E44D00DCA200 /* String+capitalizingFirstLetter.swift */; };
+		BD9240392A87E44D00DCA200 /*  String+Manipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9240382A87E44D00DCA200 /*  String+Manipulation.swift */; };
 		BD92403C2A87E78C00DCA200 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD92403B2A87E78C00DCA200 /* URL.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +39,7 @@
 		BD7676242A839B90004771EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BD9240322A87E1EA00DCA200 /* UIViewController+alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+alert.swift"; sourceTree = "<group>"; };
 		BD9240342A87E31D00DCA200 /* NetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingManager.swift; sourceTree = "<group>"; };
-		BD9240382A87E44D00DCA200 /* String+capitalizingFirstLetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+capitalizingFirstLetter.swift"; sourceTree = "<group>"; };
+		BD9240382A87E44D00DCA200 /*  String+Manipulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " String+Manipulation.swift"; sourceTree = "<group>"; };
 		BD92403B2A87E78C00DCA200 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		FA0DB0288A4907A4B873D627 /* Pods-Anime-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anime-App.debug.xcconfig"; path = "Target Support Files/Pods-Anime-App/Pods-Anime-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,7 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				BD9240322A87E1EA00DCA200 /* UIViewController+alert.swift */,
-				BD9240382A87E44D00DCA200 /* String+capitalizingFirstLetter.swift */,
+				BD9240382A87E44D00DCA200 /*  String+Manipulation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -300,7 +300,7 @@
 			files = (
 				BD30FC4E2A839D5C008DFCA6 /* AnimeViewModel.swift in Sources */,
 				BD30FC4C2A839D51008DFCA6 /* Anime.swift in Sources */,
-				BD9240392A87E44D00DCA200 /* String+capitalizingFirstLetter.swift in Sources */,
+				BD9240392A87E44D00DCA200 /*  String+Manipulation.swift in Sources */,
 				BD92403C2A87E78C00DCA200 /* URL.swift in Sources */,
 				BD30FC502A839DCE008DFCA6 /* AnimeTableViewCell.swift in Sources */,
 				BD76761B2A839B8E004771EB /* AnimeViewController.swift in Sources */,
