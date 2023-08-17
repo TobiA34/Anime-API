@@ -117,14 +117,14 @@ extension AnimeViewController {
     func getAnime() {
         
         self.spinner.startAnimating()
-        animeViewModel.getAnime { res in
+        animeViewModel.getAnime { [weak self] res in
             switch res {
             case .success:
-                self.tableView.reloadData()
+                self?.tableView.reloadData()
             case .failure(let error):
-                self.showAlert(title: "Error", message: error.localizedDescription)
+                self?.showAlert(title: "Error", message: error.localizedDescription)
             }
-            self.spinner.stopAnimating()
+            self?.spinner.stopAnimating()
         }
         
     }
