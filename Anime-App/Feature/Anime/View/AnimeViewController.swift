@@ -11,6 +11,9 @@ class AnimeViewController: UIViewController {
     
     var searchTask: DispatchWorkItem?
     private var animeViewModel = AnimeViewModel()
+    var offset = 1
+    let page = 10
+    var isLoading = false
     
     private lazy var spinner : UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
@@ -114,13 +117,15 @@ extension AnimeViewController {
         ])
     }
     
+    
     func getAnime() {
-        
+        isLoading = true
         self.spinner.startAnimating()
-        animeViewModel.getAnime { [weak self] res in
+        animeViewModel.getAnime(page: page, offset: offset) { [weak self] res in
             switch res {
             case .success:
                 self?.tableView.reloadData()
+                self?.isLoading = false
             case .failure(let error):
                 self?.showAlert(title: "Error", message: error.localizedDescription)
             }
@@ -129,7 +134,20 @@ extension AnimeViewController {
         
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height {
+            if !isLoading {
+                offset+=5
+                getAnime()
+            }
+        }
+    }
 }
+
+
 
 
 

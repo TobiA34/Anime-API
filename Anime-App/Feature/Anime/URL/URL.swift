@@ -10,6 +10,7 @@ import Foundation
 enum UrlEndpoint {
     case getAnime
     case searchAnime
+    case pagination
 }
 
 extension UrlEndpoint {
@@ -19,6 +20,8 @@ extension UrlEndpoint {
             return "/anime"
         case .searchAnime:
             return "/anime?filter[text]="
+        case .pagination:
+            return "page[limit]="
         }
     }
 }

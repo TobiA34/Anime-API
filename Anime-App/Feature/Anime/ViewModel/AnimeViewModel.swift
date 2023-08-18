@@ -11,9 +11,9 @@ class AnimeViewModel {
         
     private(set) var animes: [Anime] = []
  
-    func getAnime(completion: @escaping (Result<Void,NetworkingError>) -> Void) {
-        // get request
-        let url = BaseUrl.baseUrl.url + UrlEndpoint.getAnime.endpoint
+    func getAnime(page: Int, offset: Int , completion: @escaping (Result<Void,NetworkingError>) -> Void) {
+        let url = BaseUrl.baseUrl.url + UrlEndpoint.getAnime.endpoint + "?" + UrlEndpoint.pagination.endpoint + "\(page)&page[offset]=\(offset)"
+        
         NetworkingManager.shared.request(url, type: AnimeResult.self) { res in
  
             switch res {
