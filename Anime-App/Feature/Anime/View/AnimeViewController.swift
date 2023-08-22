@@ -9,11 +9,14 @@ import UIKit
 
 class AnimeViewController: UIViewController {
     
+    
+    
     var searchTask: DispatchWorkItem?
     private var animeViewModel = AnimeViewModel()
-    var offset = 1
-    let page = 10
-    var isLoading = false
+    private var page = 10
+    private var pageLimit = 20
+    private var isLoading = false
+ 
     
     private lazy var spinner : UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
@@ -58,7 +61,7 @@ extension AnimeViewController: UISearchBarDelegate {
         self.searchTask?.cancel()
         
         let task = DispatchWorkItem { [weak self] in
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            DispatchQueue.main.async {
                 self?.spinner.startAnimating()
                 self?.animeViewModel.searchAnime(query: searchText) { res in
                     
@@ -100,6 +103,7 @@ extension AnimeViewController {
         title = "Anime"
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.prefetchDataSource = self
         getAnime()
         createSearchBar()
         view.addSubview(tableView)
@@ -121,7 +125,7 @@ extension AnimeViewController {
     func getAnime() {
         isLoading = true
         self.spinner.startAnimating()
-        animeViewModel.getAnime(page: page, offset: offset) { [weak self] res in
+        animeViewModel.getAnime { [weak self] res in
             switch res {
             case .success:
                 self?.tableView.reloadData()
@@ -134,20 +138,43 @@ extension AnimeViewController {
         
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
+    func fetchAnime() {
+        self.spinner.startAnimating()
         
-        if offsetY > contentHeight - scrollView.frame.height {
-            if !isLoading {
-                offset+=5
-                getAnime()
-            }
+        animeViewModel.fetchAnime(page: page) { [weak self] res in
+            switch res {
+            case .success:
+                self?.tableView.reloadData()
+                self?.isLoading = false
+            case .failure:
+                print("no more data")
+             }
+            self?.spinner.stopAnimating()
         }
     }
+    
 }
 
 
+extension AnimeViewController: UITableViewDataSourcePrefetching {
+
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            let lastItem = animeViewModel.animes.count - 1
+            if indexPath.row == lastItem {
+                page+=2
+                fetchAnime()
+            } else if page > pageLimit {
+                break
+            }
+            
+            
+        }
+        
+        
+    }
+    
+}
 
 
 

@@ -19,9 +19,9 @@ extension UrlEndpoint {
         case .getAnime:
             return "/anime"
         case .searchAnime:
-            return "/anime?filter[text]="
+            return "/anime?"
         case .pagination:
-            return "page[limit]="
+            return "?"
         }
     }
 }
