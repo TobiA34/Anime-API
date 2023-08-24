@@ -11,11 +11,27 @@ enum UrlEndpoint {
     case getAnime
 }
 
+
 extension UrlEndpoint {
     var endpoint: String {
         switch self {
         case .getAnime:
-            return "api/edge/anime"
+            return "/anime"
+        }
+    }
+    
+}
+
+
+enum URLPath {
+    case animepath
+}
+
+extension URLPath {
+    var url: String {
+        switch self {
+        case.animepath:
+            return "/api/edge"
         }
     }
 }
@@ -28,7 +44,7 @@ extension BaseUrl {
     var url: String {
         switch self {
         case .baseUrl:
-            return "https://kitsu.io/"
+            return " https://kitsu.io/api/edge"
         }
     }
 }

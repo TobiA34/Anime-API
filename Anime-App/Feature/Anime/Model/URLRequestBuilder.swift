@@ -15,11 +15,11 @@ struct URLRequestBuilder {
 extension URLRequestBuilder {
 
     static func search(for query: String) -> Self {
-        URLRequestBuilder(path: UrlEndpoint.getAnime.endpoint,
+        URLRequestBuilder(path: URLPath.animepath.url + UrlEndpoint.getAnime.endpoint,
                  queryItems: [URLQueryItem(name: "filter[text]", value: query)])
     }
     static func fetchAnime(page: Int) -> Self {
-        URLRequestBuilder(path: UrlEndpoint.getAnime.endpoint,
+        URLRequestBuilder(path:URLPath.animepath.url + UrlEndpoint.getAnime.endpoint,
                  queryItems: [URLQueryItem(name: "page[offset]", value: "\(page)")])
     }
 }
@@ -29,15 +29,11 @@ extension URLRequestBuilder {
        var urlComps = URLComponents()
         urlComps.scheme = "https"
         urlComps.host = "kitsu.io"
-        urlComps.path = "/" + path
+        urlComps.path =  path
         urlComps.queryItems = queryItems
-        
-        guard let url = urlComps.url else {
-            fatalError("Invalid URL components: \(urlComps)")
-        }
-        return url
-        
-        
+
+        return urlComps.url
+            
     }
 }
 
