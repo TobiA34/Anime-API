@@ -13,11 +13,9 @@ class AnimeViewController: UIViewController {
     
     var searchTask: DispatchWorkItem?
     private var animeViewModel = AnimeViewModel()
-    private var page = 10
-    private var pageLimit = 20
-    private var isLoading = false
+    private var page = 0
+    private var isFetching = false
  
-    
     private lazy var spinner : UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
         return spinner
@@ -61,7 +59,7 @@ extension AnimeViewController: UISearchBarDelegate {
         self.searchTask?.cancel()
         
         let task = DispatchWorkItem { [weak self] in
-            DispatchQueue.main.async {
+  
                 self?.spinner.startAnimating()
                 self?.animeViewModel.searchAnime(query: searchText) { res in
                     
@@ -74,15 +72,11 @@ extension AnimeViewController: UISearchBarDelegate {
                     self?.spinner.stopAnimating()
                     
                 }
-            }
         }
         
         self.searchTask = task
         
-        //0.5 is the wait or idle time for execution of the function applyFilter
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: task)
-        
-        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -103,8 +97,7 @@ extension AnimeViewController {
         title = "Anime"
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.prefetchDataSource = self
-        getAnime()
+        fetchAnime()
         createSearchBar()
         view.addSubview(tableView)
         spinner.center = self.view.center
@@ -114,70 +107,44 @@ extension AnimeViewController {
         NSLayoutConstraint.activate([
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant:  16),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
     
-    
-    func getAnime() {
-        isLoading = true
-        self.spinner.startAnimating()
-        animeViewModel.getAnime { [weak self] res in
-            switch res {
-            case .success:
-                self?.tableView.reloadData()
-                self?.isLoading = false
-            case .failure(let error):
-                self?.showAlert(title: "Error", message: error.localizedDescription)
-            }
-            self?.spinner.stopAnimating()
-        }
-        
-    }
-    
     func fetchAnime() {
+        self.isFetching = true
         self.spinner.startAnimating()
-        
-        animeViewModel.fetchAnime(page: page) { [weak self] res in
+        animeViewModel.fetchAnime(page: page)  { [weak self] res in
             switch res {
             case .success:
                 self?.tableView.reloadData()
-                self?.isLoading = false
-            case .failure:
+             case .failure:
                 print("no more data")
              }
             self?.spinner.stopAnimating()
+            self?.isFetching = false
         }
     }
     
 }
 
 
-extension AnimeViewController: UITableViewDataSourcePrefetching {
-
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            let lastItem = animeViewModel.animes.count - 1
-            if indexPath.row == lastItem {
-                page+=2
+extension AnimeViewController {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height {
+            if !isFetching {
+                page+=1
                 fetchAnime()
-            } else if page > pageLimit {
-                break
             }
-            
-            
         }
-        
-        
     }
-    
 }
-
-
-
 
 
 extension AnimeViewController: UITableViewDataSource, UITableViewDelegate {

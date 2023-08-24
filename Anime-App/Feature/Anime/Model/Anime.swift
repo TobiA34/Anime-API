@@ -6,18 +6,16 @@
 //
 
 import Foundation
-// MARK: - Anime
+
 struct AnimeResult: Codable {
     let data: [Anime]
 }
 
-// MARK: - Datum
 struct Anime: Codable {
     let id: String
     let attributes: Attributes?
 }
 
-// MARK: - Attributes
 struct Attributes: Codable {
     let createdAt: String?
     let updatedAt: String?
@@ -39,8 +37,6 @@ struct Attributes: Codable {
     let youtubeVideoId: String?
     let nsfw: Bool
 }
-
- 
 
 // MARK: - PosterImage
 struct PosterImage: Codable {

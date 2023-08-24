@@ -32,8 +32,6 @@ class AnimeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     func configure(anime: Anime) {
         let editedSlugText = anime.attributes?.slug?.replacingOccurrences(of: "-", with: " ")
         titleLbl.text = editedSlugText?.capitalizingFirstLetter()
