@@ -10,6 +10,21 @@ import Foundation
 class AnimeViewModel {
     
     private(set) var animes: [Anime] = []
+    
+    func resetAnime(completion: @escaping (Result<Void,NetworkingError>) -> Void) {
+        NetworkingManager.shared.request(.fetchAnime(page: 0), type: AnimeResult.self) { res in
+            
+        switch res {
+            case .success(let response):
+            self.animes = response.data
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(.custom(error: error)))
+            }
+        }
+        
+    }
+
  
     func fetchAnime(page: Int, completion: @escaping (Result<Void,NetworkingError>) -> Void) {
         NetworkingManager.shared.request(.fetchAnime(page: page), type: AnimeResult.self) { res in

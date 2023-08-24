@@ -11,7 +11,7 @@ class AnimeViewController: UIViewController {
     
     
     
-    var searchTask: DispatchWorkItem?
+    private var searchTask: DispatchWorkItem?
     private var animeViewModel = AnimeViewModel()
     private var page = 0
     private var isFetching = false
@@ -21,6 +21,17 @@ class AnimeViewController: UIViewController {
         return spinner
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(AnimeViewController.handleRefresh), for: .valueChanged)
+        refreshControl.tintColor = UIColor.black
+        let refreshControlTitle = "Refreshing Animes"
+                let color = [ NSAttributedString.Key.foregroundColor: UIColor.black ]
+                let attributedTitle = NSAttributedString(string: refreshControlTitle, attributes: color)
+        refreshControl.attributedTitle = attributedTitle
+ 
+        return refreshControl
+    }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -43,6 +54,11 @@ class AnimeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        resetAnime()
+        refreshControl.endRefreshing()
     }
 }
 
@@ -100,10 +116,11 @@ extension AnimeViewController {
         fetchAnime()
         createSearchBar()
         view.addSubview(tableView)
+        self.tableView.addSubview(self.refreshControl)
         spinner.center = self.view.center
         self.view.addSubview(spinner)
         spinner.bringSubviewToFront(self.view)
-        
+
         NSLayoutConstraint.activate([
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -129,6 +146,17 @@ extension AnimeViewController {
         }
     }
     
+    func resetAnime() {
+        animeViewModel.resetAnime { res in
+            switch res {
+            case .success:
+                self.tableView.reloadData()
+            case .failure:
+                print("Failed to reset")
+            }
+        }
+    }
+    
 }
 
 
@@ -136,8 +164,8 @@ extension AnimeViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
-        
-        if offsetY > contentHeight - scrollView.frame.height {
+
+        if offsetY > contentHeight - scrollView.frame.height + 150 {
             if !isFetching {
                 page+=1
                 fetchAnime()
