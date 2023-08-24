@@ -9,16 +9,29 @@ import Foundation
 
 enum UrlEndpoint {
     case getAnime
-    case searchAnime
 }
+
 
 extension UrlEndpoint {
     var endpoint: String {
         switch self {
         case .getAnime:
             return "/anime"
-        case .searchAnime:
-            return "/anime?filter[text]="
+        }
+    }
+    
+}
+
+
+enum URLPath {
+    case animepath
+}
+
+extension URLPath {
+    var url: String {
+        switch self {
+        case.animepath:
+            return "/api/edge"
         }
     }
 }
@@ -31,7 +44,7 @@ extension BaseUrl {
     var url: String {
         switch self {
         case .baseUrl:
-            return "https://kitsu.io/api/edge"
+            return " https://kitsu.io/api/edge"
         }
     }
 }

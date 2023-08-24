@@ -32,8 +32,6 @@ class AnimeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     func configure(anime: Anime) {
         let editedSlugText = anime.attributes?.slug?.replacingOccurrences(of: "-", with: " ")
         titleLbl.text = editedSlugText?.capitalizingFirstLetter()
@@ -45,10 +43,10 @@ extension AnimeTableViewCell {
         contentView.addSubview(stackView)
         stackView.addArrangedSubview(titleLbl)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: self.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor,constant: 16),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
     }
     

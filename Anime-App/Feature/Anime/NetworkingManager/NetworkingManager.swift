@@ -15,7 +15,7 @@ import Foundation
        case invalidData
        case failedToDecode(error: Error)
        case failedToReloadData
-   }
+    }
 
 
 class NetworkingManager {
@@ -24,13 +24,13 @@ class NetworkingManager {
     
     private init() {}
     
-    func request<T: Codable>(_ absoluteUrl: String,
+    func request<T: Codable>(_ urlRequestBuilder: URLRequestBuilder,
                              type: T.Type,
                              completion: @escaping (Result<T,Error>) -> Void) {
-        guard let url = URL(string: absoluteUrl) else {
-            completion(.failure(NetworkingError.invalidUrl))
-            return
-        }
+ 
+        guard let url = urlRequestBuilder.url else {
+                 return completion(.failure(NetworkingError.invalidUrl))
+             }
         
         let request = URLRequest(url: url)
         
@@ -49,8 +49,7 @@ class NetworkingManager {
                     return
                     
                 }
-                
-                
+ 
                 guard let data = data else {
                     completion(.failure(NetworkingError.invalidData))
                     return
@@ -69,6 +68,8 @@ class NetworkingManager {
         }
         dataTask.resume()
     }
+    
+    
 }
 
 

@@ -36,9 +36,6 @@ class AnimeDetailViewController: UIViewController {
         return synopsis
     }()
     
- 
-    
-    
     private let anime: Anime
     init(anime: Anime) {
         self.anime = anime
@@ -59,15 +56,13 @@ extension AnimeDetailViewController {
         title = anime.attributes?.slug
         view.addSubview(mainStackview)
         mainStackview.addArrangedSubview(imageView)
-         mainStackview.addArrangedSubview(synopsisTextView)
-
+        mainStackview.addArrangedSubview(synopsisTextView)
 
         let url = URL(string: anime.attributes?.posterImage.medium ?? "")
         imageView.kf.setImage(with: url)
         
         synopsisTextView.text = anime.attributes?.synopsis
  
-
         NSLayoutConstraint.activate([
             mainStackview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mainStackview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 16),
