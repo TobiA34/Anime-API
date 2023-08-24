@@ -24,8 +24,12 @@ class AnimeViewController: UIViewController {
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(AnimeViewController.handleRefresh), for: .valueChanged)
-        refreshControl.tintColor = UIColor.red
-        
+        refreshControl.tintColor = UIColor.black
+        let refreshControlTitle = "Refreshing Animes"
+                let color = [ NSAttributedString.Key.foregroundColor: UIColor.black ]
+                let attributedTitle = NSAttributedString(string: refreshControlTitle, attributes: color)
+        refreshControl.attributedTitle = attributedTitle
+ 
         return refreshControl
     }()
     
@@ -161,7 +165,7 @@ extension AnimeViewController {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
 
-        if offsetY > contentHeight - scrollView.frame.height + 200 {
+        if offsetY > contentHeight - scrollView.frame.height + 150 {
             if !isFetching {
                 page+=1
                 fetchAnime()
