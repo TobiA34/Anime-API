@@ -26,7 +26,6 @@ final class Anime_AppTests: XCTestCase {
                let path = urlRequestBuilder.url?.path
               {
                 let baseURL = scheme + host + path
-                print("Base Url \(baseURL)")
                 let expectedBaseURLString = "https://kitsu.io/api/edge"
                 XCTAssertEqual(baseURL, expectedBaseURLString)
             }
