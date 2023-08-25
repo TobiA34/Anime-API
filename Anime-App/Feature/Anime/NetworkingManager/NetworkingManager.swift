@@ -35,7 +35,7 @@ class NetworkingManager {
         let request = URLRequest(url: url)
         
         let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
                             
                 if error != nil {
                     completion(.failure(NetworkingError.custom(error: error!)))
