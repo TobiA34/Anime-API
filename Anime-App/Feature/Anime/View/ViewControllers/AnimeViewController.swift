@@ -25,6 +25,7 @@ class AnimeViewController: UIViewController {
     private lazy var spinner : UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.color = .blue
+        
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()
@@ -147,6 +148,9 @@ extension AnimeViewController {
         ])
     }
     
+    
+    
+    
     func resetAnime() {
         animeViewModel.resetAnime { res in
             switch res {
@@ -159,33 +163,38 @@ extension AnimeViewController {
     }
     
     func startPagination() {
+        
+        if isPaginating {
+            self.spinner.startAnimating()
+        }
+        
         self.isPaginating = true
-        self.spinner.startAnimating()
-        spinner.isHidden = false
         animeViewModel.fetchAnime(page: page)  { [weak self] res in
             switch res {
             case .success:
                 self?.tableView.reloadData()
+                self?.page+=1
             case .failure:
                 print("no more data")
             }
             self?.spinner.stopAnimating()
-            self?.spinner.isHidden = true
-            self?.isPaginating = true
+            self?.isPaginating = false
+            
         }
+        
     }
     
     
     func fetchAnime() {
-        if isFetching == true || isPaginating == false {
+        if isFetching == false && isPaginating == false {
             self.customLoadingView.startAnimating()
-            UIView.animate(withDuration: 1, delay: 1, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
+            UIView.animate(withDuration: 1, delay: 0.25, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
                 self.customLoadingView.alpha = 0
             }) { _ in
-                self.customLoadingView.removeFromSuperview()
+                self.customLoadingView.stopAnimating()
+                self.spinner.stopAnimating()
             }
-            self.spinner.isHidden = true
-            self.isPaginating = false
+            self.isFetching = true
             animeViewModel.fetchAnime(page: page)  { [weak self] res in
                 switch res {
                 case .success:
@@ -193,7 +202,7 @@ extension AnimeViewController {
                 case .failure:
                     print("no more data")
                 }
-                self?.isPaginating = true
+                self?.isFetching = false
             }
         }
     }
@@ -205,10 +214,7 @@ extension AnimeViewController {
         let contentHeight = scrollView.contentSize.height
         
         if offsetY > contentHeight - scrollView.frame.height + 150 {
-            if isPaginating {
-                page+=1
-                startPagination()
-            }
+            startPagination()
         }
     }
 }
@@ -236,6 +242,4 @@ extension AnimeViewController: UITableViewDataSource, UITableViewDelegate {
         navigationController?.pushViewController(vc, animated: true)
     }
 }
-
-
 

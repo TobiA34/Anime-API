@@ -52,6 +52,10 @@ class CustomSpinnerView: UIView {
         spinner.startAnimating()
     }
     
+    func stopAnimating(){
+        spinner.stopAnimating()
+    }
+    
 }
 
 extension CustomSpinnerView {
