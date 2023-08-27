@@ -163,12 +163,10 @@ extension AnimeViewController {
     }
     
     func startPagination() {
-        
-        if isPaginating {
-            self.spinner.startAnimating()
+        if isPaginating && !isFetching {
+             self.spinner.startAnimating()
         }
-        
-        self.isPaginating = true
+        isPaginating = true
         animeViewModel.fetchAnime(page: page)  { [weak self] res in
             switch res {
             case .success:
@@ -177,33 +175,31 @@ extension AnimeViewController {
             case .failure:
                 print("no more data")
             }
-            self?.spinner.stopAnimating()
             self?.isPaginating = false
-            
+            self?.spinner.stopAnimating()
         }
-        
     }
     
     
     func fetchAnime() {
-        if isFetching == false && isPaginating == false {
+        if !isFetching && !isPaginating {
             self.customLoadingView.startAnimating()
-            UIView.animate(withDuration: 1, delay: 0.25, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
-                self.customLoadingView.alpha = 0
-            }) { _ in
-                self.customLoadingView.stopAnimating()
-                self.spinner.stopAnimating()
+        }
+         UIView.animate(withDuration: 1, delay: 0.25, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
+            self.customLoadingView.alpha = 0
+        }) { _ in
+            self.customLoadingView.stopAnimating()
+            self.spinner.stopAnimating()
+        }
+        self.isFetching = true
+        animeViewModel.fetchAnime(page: page)  { [weak self] res in
+            switch res {
+            case .success:
+                self?.tableView.reloadData()
+            case .failure:
+                print("no more data")
             }
-            self.isFetching = true
-            animeViewModel.fetchAnime(page: page)  { [weak self] res in
-                switch res {
-                case .success:
-                    self?.tableView.reloadData()
-                case .failure:
-                    print("no more data")
-                }
-                self?.isFetching = false
-            }
+            self?.isFetching = false
         }
     }
 }
