@@ -16,6 +16,8 @@ class AnimeViewController: UIViewController {
     private var page = 0
     private var isFetching = false
     private var isPaginating = false
+    private var audioManager = AudioManager(name: ButtonSounds.button7.title)
+    
     
     private lazy var customLoadingView : CustomSpinnerView = {
         let customLoadingView = CustomSpinnerView(title: "Fetching Animes")
@@ -66,6 +68,7 @@ class AnimeViewController: UIViewController {
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        addSound()
         resetAnime()
         refreshControl.endRefreshing()
     }
@@ -110,6 +113,31 @@ extension AnimeViewController: UISearchBarDelegate {
 }
 
 extension AnimeViewController {
+    
+    func addHapticFeedBack() {
+        let hapticFeedbackIsOn = UserDefaults.standard.bool(forKey: "UseHaptic")
+        if hapticFeedbackIsOn {
+            print("haptic feedback is on")
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
+        }
+    }
+    
+    @objc func addSound() {
+        let audioIsOn = UserDefaults.standard.bool(forKey: "UseAudio")
+        addHapticFeedBack()
+        if audioIsOn {
+            print("Sound is playing")
+            audioManager.playSound()
+        } else {
+            audioManager.stopSound()
+        }
+    }
+    
+    
+}
+
+extension AnimeViewController {
     func createSearchBar() {
         navigationItem.searchController = searchVc
         searchVc.searchBar.delegate = self
@@ -148,9 +176,6 @@ extension AnimeViewController {
         ])
     }
     
-    
-    
-    
     func resetAnime() {
         animeViewModel.resetAnime { res in
             switch res {
@@ -164,7 +189,7 @@ extension AnimeViewController {
     
     func startPagination() {
         if isPaginating && !isFetching {
-             self.spinner.startAnimating()
+            self.spinner.startAnimating()
         }
         isPaginating = true
         animeViewModel.fetchAnime(page: page)  { [weak self] res in
@@ -180,12 +205,11 @@ extension AnimeViewController {
         }
     }
     
-    
     func fetchAnime() {
         if !isFetching && !isPaginating {
             self.customLoadingView.startAnimating()
         }
-         UIView.animate(withDuration: 1, delay: 0.25, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 1, delay: 0.25, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
             self.customLoadingView.alpha = 0
         }) { _ in
             self.customLoadingView.stopAnimating()
@@ -210,11 +234,11 @@ extension AnimeViewController {
         let contentHeight = scrollView.contentSize.height
         
         if offsetY > contentHeight - scrollView.frame.height + 150 {
+            addSound()
             startPagination()
         }
     }
 }
-
 
 extension AnimeViewController: UITableViewDataSource, UITableViewDelegate {
     

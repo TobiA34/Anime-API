@@ -24,6 +24,13 @@
 		BD9240392A87E44D00DCA200 /*  String+Manipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9240382A87E44D00DCA200 /*  String+Manipulation.swift */; };
 		BD92403C2A87E78C00DCA200 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD92403B2A87E78C00DCA200 /* URL.swift */; };
 		BDB2412F2A98997300FED488 /* CustomSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB2412E2A98997300FED488 /* CustomSpinnerView.swift */; };
+		BDBD452F2A9BB3820003B309 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBD452E2A9BB3820003B309 /* TabBarController.swift */; };
+		BDBD45312A9BB3BE0003B309 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBD45302A9BB3BE0003B309 /* SettingsViewController.swift */; };
+		BDBD45342A9BB4360003B309 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBD45332A9BB4360003B309 /* AudioManager.swift */; };
+		BDBD45372A9BB4A90003B309 /* Button1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BDBD45362A9BB4A90003B309 /* Button1.m4a */; };
+		BDBD45382A9BB4A90003B309 /* Button1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BDBD45362A9BB4A90003B309 /* Button1.m4a */; };
+		BDBD453A2A9BB96C0003B309 /* Button7.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BDBD45392A9BB96C0003B309 /* Button7.m4a */; };
+		BDBD453B2A9BB96C0003B309 /* Button7.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BDBD45392A9BB96C0003B309 /* Button7.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +65,11 @@
 		BD9240382A87E44D00DCA200 /*  String+Manipulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " String+Manipulation.swift"; sourceTree = "<group>"; };
 		BD92403B2A87E78C00DCA200 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		BDB2412E2A98997300FED488 /* CustomSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSpinnerView.swift; sourceTree = "<group>"; };
+		BDBD452E2A9BB3820003B309 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		BDBD45302A9BB3BE0003B309 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		BDBD45332A9BB4360003B309 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		BDBD45362A9BB4A90003B309 /* Button1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Button1.m4a; sourceTree = "<group>"; };
+		BDBD45392A9BB96C0003B309 /* Button7.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Button7.m4a; sourceTree = "<group>"; };
 		FA0DB0288A4907A4B873D627 /* Pods-Anime-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anime-App.debug.xcconfig"; path = "Target Support Files/Pods-Anime-App/Pods-Anime-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +112,7 @@
 		BD30FC452A839D2F008DFCA6 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				BDBD45352A9BB4920003B309 /* audio */,
 				BD9240372A87E42F00DCA200 /* Extensions */,
 				BDB2412E2A98997300FED488 /* CustomSpinnerView.swift */,
 			);
@@ -117,6 +130,7 @@
 		BD30FC472A839D3B008DFCA6 /* Anime */ = {
 			isa = PBXGroup;
 			children = (
+				BDBD45322A9BB40F0003B309 /* AudioManger */,
 				BD92403A2A87E78300DCA200 /* URL */,
 				BD9240362A87E42300DCA200 /* NetworkingManager */,
 				BD30FC4A2A839D4A008DFCA6 /* Models */,
@@ -137,6 +151,8 @@
 		BD30FC492A839D47008DFCA6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BDBD45302A9BB3BE0003B309 /* SettingsViewController.swift */,
+				BDBD452D2A9BB36B0003B309 /* TabBar */,
 				BDB241332A98B15F00FED488 /* TableViewCells */,
 				BDB241322A98B15100FED488 /* ViewControllers */,
 			);
@@ -236,6 +252,31 @@
 			path = TableViewCells;
 			sourceTree = "<group>";
 		};
+		BDBD452D2A9BB36B0003B309 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				BDBD452E2A9BB3820003B309 /* TabBarController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		BDBD45322A9BB40F0003B309 /* AudioManger */ = {
+			isa = PBXGroup;
+			children = (
+				BDBD45332A9BB4360003B309 /* AudioManager.swift */,
+			);
+			path = AudioManger;
+			sourceTree = "<group>";
+		};
+		BDBD45352A9BB4920003B309 /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				BDBD45392A9BB96C0003B309 /* Button7.m4a */,
+				BDBD45362A9BB4A90003B309 /* Button1.m4a */,
+			);
+			path = audio;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -319,6 +360,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDBD45382A9BB4A90003B309 /* Button1.m4a in Resources */,
+				BDBD453B2A9BB96C0003B309 /* Button7.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,7 +370,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD7676232A839B90004771EB /* LaunchScreen.storyboard in Resources */,
+				BDBD45372A9BB4A90003B309 /* Button1.m4a in Resources */,
 				BD7676202A839B90004771EB /* Assets.xcassets in Resources */,
+				BDBD453A2A9BB96C0003B309 /* Button7.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,9 +441,12 @@
 				BD512CF72A94E8A3001D1683 /* URLRequestBuilder.swift in Sources */,
 				BD76761B2A839B8E004771EB /* AnimeViewController.swift in Sources */,
 				BD30FC522A839DED008DFCA6 /* AnimeDetailViewController.swift in Sources */,
+				BDBD45312A9BB3BE0003B309 /* SettingsViewController.swift in Sources */,
 				BD9240332A87E1EA00DCA200 /* UIViewController+alert.swift in Sources */,
+				BDBD45342A9BB4360003B309 /* AudioManager.swift in Sources */,
 				BD9240352A87E31D00DCA200 /* NetworkingManager.swift in Sources */,
 				BD7676172A839B8E004771EB /* AppDelegate.swift in Sources */,
+				BDBD452F2A9BB3820003B309 /* TabBarController.swift in Sources */,
 				BD7676192A839B8E004771EB /* SceneDelegate.swift in Sources */,
 				BDB2412F2A98997300FED488 /* CustomSpinnerView.swift in Sources */,
 			);
