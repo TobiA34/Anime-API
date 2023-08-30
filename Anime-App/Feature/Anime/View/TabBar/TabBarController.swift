@@ -16,7 +16,7 @@ class TabBarViewController: UITabBarController {
         tabBar.unselectedItemTintColor = .systemGray
  
         let vc1 = createTabBarItem(tabBarTitle: "Anime", tabBarImage: "person", viewController: AnimeViewController())
-        let vc2 = createTabBarItem(tabBarTitle: "Setting", tabBarImage: "gear", viewController: SettingsViewController())
+        let vc2 = createTabBarItem(tabBarTitle: "Setting", tabBarImage: "gear", viewController: SettingViewController())
 
 
         viewControllers = [vc1,vc2]

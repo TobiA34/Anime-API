@@ -10,14 +10,10 @@ import AVFoundation
 
 class AudioManager {
     
-    private var name: String
     private var player: AVAudioPlayer?
-
-    init(name: String) {
-        self.name = name
-    }
     
-    func playSound() {
+    func play(name: String) {
+        stop()
         guard let path = Bundle.main.path(forResource: name, ofType:"m4a") else {
             return }
         let url = URL(fileURLWithPath: path)
@@ -31,11 +27,7 @@ class AudioManager {
         }
     }
     
-    func stopSound() {
+    func stop() {
         player?.stop()
     }
-    
-    
-    
- 
 }

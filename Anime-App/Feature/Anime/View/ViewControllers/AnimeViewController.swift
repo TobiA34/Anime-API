@@ -8,15 +8,13 @@
 import UIKit
 
 class AnimeViewController: UIViewController {
-    
-    
-    
+
     private var searchTask: DispatchWorkItem?
     private var animeViewModel = AnimeViewModel()
     private var page = 0
     private var isFetching = false
     private var isPaginating = false
-    private var audioManager = AudioManager(name: ButtonSounds.button7.title)
+    private var audioManager = AudioManager()
     
     
     private lazy var customLoadingView : CustomSpinnerView = {
@@ -69,6 +67,7 @@ class AnimeViewController: UIViewController {
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         addSound()
+        addHapticFeedBack()
         resetAnime()
         refreshControl.endRefreshing()
     }
@@ -115,29 +114,27 @@ extension AnimeViewController: UISearchBarDelegate {
 extension AnimeViewController {
     
     func addHapticFeedBack() {
-        let hapticFeedbackIsOn = UserDefaults.standard.bool(forKey: "UseHaptic")
+        let hapticFeedbackIsOn = UserDefaults.standard.bool(forKey: UserDefaultsKeys.isHapticsEnabled.title)
         if hapticFeedbackIsOn {
-            print("haptic feedback is on")
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
         }
     }
     
-    @objc func addSound() {
-        let audioIsOn = UserDefaults.standard.bool(forKey: "UseAudio")
-        addHapticFeedBack()
+    func addSound() {
+        let audioIsOn = UserDefaults.standard.bool(forKey: UserDefaultsKeys.isAudioEnabled.title)
+        audioManager.stop()
         if audioIsOn {
-            print("Sound is playing")
-            audioManager.playSound()
-        } else {
-            audioManager.stopSound()
+            audioManager.play(name: ButtonSounds.button7.title)
         }
     }
     
     
 }
 
-extension AnimeViewController {
+extension AnimeViewController  {
+
+
     func createSearchBar() {
         navigationItem.searchController = searchVc
         searchVc.searchBar.delegate = self
@@ -235,6 +232,7 @@ extension AnimeViewController {
         
         if offsetY > contentHeight - scrollView.frame.height + 150 {
             addSound()
+            addHapticFeedBack()
             startPagination()
         }
     }
