@@ -8,26 +8,20 @@
 import UIKit
 
 class AnimeViewController: UIViewController {
-    
-    
-    
+
     private var searchTask: DispatchWorkItem?
     private var animeViewModel = AnimeViewModel()
     private var page = 0
+    private var limit = 10
+    private var offset = 0
     private var isFetching = false
     private var isPaginating = false
+    private var audioManager = AudioManager()
+    
     
     private lazy var customLoadingView : CustomSpinnerView = {
         let customLoadingView = CustomSpinnerView(title: "Fetching Animes")
         return customLoadingView
-    }()
-    
-    private lazy var spinner : UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.color = .blue
-        
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        return spinner
     }()
     
     private lazy var refreshControl: UIRefreshControl = {
@@ -66,6 +60,8 @@ class AnimeViewController: UIViewController {
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        addSound()
+        addHapticFeedBack()
         resetAnime()
         refreshControl.endRefreshing()
     }
@@ -110,6 +106,29 @@ extension AnimeViewController: UISearchBarDelegate {
 }
 
 extension AnimeViewController {
+    
+    func addHapticFeedBack() {
+        let hapticFeedbackIsOn = UserDefaults.standard.bool(forKey: UserDefaultsKeys.isHapticsEnabled.title)
+        if hapticFeedbackIsOn {
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
+        }
+    }
+    
+    func addSound() {
+        let audioIsOn = UserDefaults.standard.bool(forKey: UserDefaultsKeys.isAudioEnabled.title)
+        audioManager.stop()
+        if audioIsOn {
+            audioManager.play(name: ButtonSounds.button7.title)
+        }
+    }
+    
+    
+}
+
+extension AnimeViewController  {
+
+
     func createSearchBar() {
         navigationItem.searchController = searchVc
         searchVc.searchBar.delegate = self
@@ -129,27 +148,17 @@ extension AnimeViewController {
         self.view.addSubview(customLoadingView)
         customLoadingView.bringSubviewToFront(self.view)
         
-        spinner.center = self.view.center
-        self.view.addSubview(spinner)
-        spinner.bringSubviewToFront(self.view)
-        
         NSLayoutConstraint.activate([
             
             customLoadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             customLoadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50),
-            
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
-    
-    
     
     func resetAnime() {
         animeViewModel.resetAnime { res in
@@ -163,32 +172,27 @@ extension AnimeViewController {
     }
     
     func startPagination() {
-        if isPaginating && !isFetching {
-             self.spinner.startAnimating()
-        }
-        isPaginating = true
-        animeViewModel.fetchAnime(page: page)  { [weak self] res in
-            switch res {
-            case .success:
-                self?.tableView.reloadData()
-                self?.page+=1
-            case .failure:
-                print("no more data")
+        if !isPaginating {
+            self.customLoadingView.startAnimating()
+            isPaginating = true
+            animeViewModel.fetchAnime(page: offset) { [weak self] res in
+                guard let self else {return}
+                switch res {
+                case .success:
+                    self.page+=1
+                    self.offset = self.limit * self.page
+                    self.tableView.reloadData()
+                case .failure:
+                    print("no more data")
+                }
+                self.isPaginating = false
+                self.customLoadingView.stopAnimating()
             }
-            self?.isPaginating = false
-            self?.spinner.stopAnimating()
         }
     }
     
-    
     func fetchAnime() {
         self.customLoadingView.startAnimating()
-         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
-            self.customLoadingView.alpha = 0
-        }) { _ in
-            self.customLoadingView.stopAnimating()
-            self.spinner.stopAnimating()
-        }
         self.isFetching = true
         animeViewModel.fetchAnime(page: page)  { [weak self] res in
             switch res {
@@ -208,11 +212,12 @@ extension AnimeViewController {
         let contentHeight = scrollView.contentSize.height
         
         if offsetY > contentHeight - scrollView.frame.height + 150 {
+            addSound()
+            addHapticFeedBack()
             startPagination()
         }
     }
 }
-
 
 extension AnimeViewController: UITableViewDataSource, UITableViewDelegate {
     

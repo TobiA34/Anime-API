@@ -14,8 +14,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            let animeVC = AnimeViewController()
-            let navigation = UINavigationController(rootViewController: animeVC)
+            let tabBar = TabBarViewController()
+            let navigation = UINavigationController(rootViewController: tabBar)
             window.rootViewController = navigation
             self.window = window
             window.makeKeyAndVisible()

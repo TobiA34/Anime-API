@@ -48,12 +48,17 @@ class CustomSpinnerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func startAnimating(){
-        spinner.startAnimating()
+    func startAnimating() {
+            self.spinner.startAnimating()
+        
     }
     
-    func stopAnimating(){
-        spinner.stopAnimating()
+    func stopAnimating(delay: Double = 0.5) {
+        UIView.animate(withDuration: 1, delay: delay, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
+            self.alpha = 0
+       }) { _ in
+           self.spinner.stopAnimating()
+       }
     }
     
 }
